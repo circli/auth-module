@@ -1,0 +1,49 @@
+{
+  "name": "circli/auth-module",
+  "type": "circli-module",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Andreas Sundqvist",
+      "email": "andreas@oak-valley.se"
+    }
+  ],
+  "repositories":
+  [
+    {
+      "url": "https://github.com/sunkan/PHP-Cookie.git",
+      "type": "git"
+    }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "atlas/orm": "^3.0",
+    "psr/container": "^1.0",
+    "php-di/php-di": "^6.0",
+    "psr/http-message": "^1.0",
+    "psr/http-server-middleware": "^1.0",
+    "psr/http-factory": "^1.0",
+    "aura/payload": "~3.0",
+    "polus/adr": "~4.0",
+    "ramsey/uuid": "^3.8",
+    "paragonie/cookie": "dev-psr7",
+    "sunkan/enum": "dev-master",
+    "psr7-sessions/storageless": "^5.0",
+    "circli/contracts": "dev-master",
+    "circli/event-dispatcher": "^2.0",
+    "circli/middlewares": "dev-master",
+    "webmozart/assert": "^1.4"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-master",
+    "atlas/cli": "^2.1",
+    "circli/web-core": "dev-master",
+    "circli/core": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "Circli\\Modules\\Auth\\": "src/"
+    }
+  }
+}
