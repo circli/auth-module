@@ -32,45 +32,51 @@ class AuthAwareRouterMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $route = $this->routerDispatcher->dispatch($request);
+        $route = $request->getAttribute('route');
+        if (!$route) {
+            $route = $this->routerDispatcher->dispatch($request);
 
-        /** @var Auth $auth */
-        $auth = $request->getAttribute(RequestAttributeKeys::AUTH);
-        if (!$auth->haveAccess(new RouteAccessRequest($route, $auth))) {
-            $request = $request->withAttribute('denied_route', $route);
-            $route = new class implements RouteInterface {
-                public function getStatus(): int
-                {
-                    return RouterDispatcherInterface::FOUND;
+            if (count($route->getAttributes())) {
+                foreach ($route->getAttributes() as $key => $value) {
+                    $request = $request->withAttribute($key, $value);
                 }
-
-                public function getAllows(): array
-                {
-                    return ['GET', 'POST'];
-                }
-
-                public function getHandler()
-                {
-                    return new AccessDeniedAction();
-                }
-
-                public function getMethod()
-                {
-                    return 'GET';
-                }
-
-                public function getAttributes(): array
-                {
-                    return [];
-                }
-            };
-        }
-
-        if (count($route->getAttributes())) {
-            foreach ($route->getAttributes() as $key => $value) {
-                $request = $request->withAttribute($key, $value);
             }
         }
+
+        if ($route->getStatus() === RouterDispatcherInterface::FOUND) {
+            /** @var Auth $auth */
+            $auth = $request->getAttribute(RequestAttributeKeys::AUTH);
+            if (!$auth->haveAccess(new RouteAccessRequest($route, $auth))) {
+                $request = $request->withAttribute('denied_route', $route);
+                $route = new class implements RouteInterface {
+                    public function getStatus(): int
+                    {
+                        return RouterDispatcherInterface::FOUND;
+                    }
+
+                    public function getAllows(): array
+                    {
+                        return ['GET', 'POST'];
+                    }
+
+                    public function getHandler()
+                    {
+                        return new AccessDeniedAction();
+                    }
+
+                    public function getMethod()
+                    {
+                        return 'GET';
+                    }
+
+                    public function getAttributes(): array
+                    {
+                        return [];
+                    }
+                };
+            }
+        }
+
         $request = $request->withAttribute('route', $route);
 
         return $handler->handle($request);
