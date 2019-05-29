@@ -4,8 +4,9 @@ namespace Circli\Modules\Auth\Web\Middleware;
 
 use Circli\Modules\Auth\Auth;
 use Circli\Modules\Auth\Events\RouteAccessRequest;
-use Circli\Modules\Auth\Web\Actions\AccessDeniedAction;
+use Circli\Modules\Auth\Web\Actions\AccessDeniedActionInterface;
 use Circli\Modules\Auth\Web\RequestAttributeKeys;
+use Polus\Adr\Interfaces\ActionInterface;
 use Polus\Router\RouteInterface;
 use Polus\Router\RouterDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -15,40 +16,34 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class AuthAwareRouterMiddleware implements MiddlewareInterface
 {
-    /** @var RouterDispatcherInterface */
-    protected $routerDispatcher;
+    /** @var AccessDeniedActionInterface */
+    private $accessDeniedAction;
 
-    public function __construct(RouterDispatcherInterface $routerDispatcher)
+    public function __construct(AccessDeniedActionInterface $accessDeniedAction)
     {
-        $this->routerDispatcher = $routerDispatcher;
+        $this->accessDeniedAction = $accessDeniedAction;
     }
 
-    /**
-     * Process an incoming server request.
-     *
-     * Processes an incoming server request in order to produce a response.
-     * If unable to produce the response itself, it may delegate to the provided
-     * request handler to do so.
-     */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $route = $request->getAttribute('route');
-        if (!$route) {
-            $route = $this->routerDispatcher->dispatch($request);
-
-            if (count($route->getAttributes())) {
-                foreach ($route->getAttributes() as $key => $value) {
-                    $request = $request->withAttribute($key, $value);
-                }
-            }
-        }
-
-        if ($route->getStatus() === RouterDispatcherInterface::FOUND) {
+        if ($route && $route->getStatus() === RouterDispatcherInterface::FOUND) {
             /** @var Auth $auth */
             $auth = $request->getAttribute(RequestAttributeKeys::AUTH);
             if (!$auth->haveAccess(new RouteAccessRequest($route, $auth))) {
                 $request = $request->withAttribute('denied_route', $route);
-                $route = new class implements RouteInterface {
+                $newRoute = new class($this->accessDeniedAction, $route) implements RouteInterface {
+                    /** @var ActionInterface */
+                    private $action;
+                    /** @var RouteInterface */
+                    private $route;
+
+                    public function __construct(ActionInterface $action, RouteInterface $route)
+                    {
+                        $this->action = $action;
+                        $this->route = $route;
+                    }
+
                     public function getStatus(): int
                     {
                         return RouterDispatcherInterface::FOUND;
@@ -61,23 +56,22 @@ class AuthAwareRouterMiddleware implements MiddlewareInterface
 
                     public function getHandler()
                     {
-                        return new AccessDeniedAction();
+                        return $this->action;
                     }
 
                     public function getMethod()
                     {
-                        return 'GET';
+                        return $this->route->getMethod();
                     }
 
                     public function getAttributes(): array
                     {
-                        return [];
+                        return $this->route->getAttributes();
                     }
                 };
+                $request = $request->withAttribute('route', $newRoute);
             }
         }
-
-        $request = $request->withAttribute('route', $route);
 
         return $handler->handle($request);
     }

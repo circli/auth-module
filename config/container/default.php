@@ -29,6 +29,8 @@ use Circli\Modules\Auth\Repositories\LoginLogRepositoryInterface;
 use Circli\Modules\Auth\Voter\AccessCheckers;
 use Circli\Modules\Auth\Voter\AuthRequiredActionVoter;
 use Circli\Modules\Auth\Voter\GuestRouteVoter;
+use Circli\Modules\Auth\Web\Actions\AccessDeniedAction;
+use Circli\Modules\Auth\Web\Actions\AccessDeniedActionInterface;
 use Circli\Modules\Auth\Web\Actions\RequireAuthInterface;
 use function DI\autowire;
 use function DI\decorate;
@@ -56,6 +58,7 @@ $defs = [
         $previous->addVoter($voter);
         return $previous;
     }),
+    AccessDeniedActionInterface::class => autowire(AccessDeniedAction::class),
 ];
 
 $mappers = [

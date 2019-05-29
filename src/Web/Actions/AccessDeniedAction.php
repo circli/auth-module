@@ -5,7 +5,7 @@ namespace Circli\Modules\Auth\Web\Actions;
 use Circli\Modules\Auth\Web\Responder\AccessDeniedResponder;
 use Circli\WebCore\Common\Actions\AbstractAction;
 
-final class AccessDeniedAction extends AbstractAction
+final class AccessDeniedAction extends AbstractAction implements AccessDeniedActionInterface
 {
     protected $responder = AccessDeniedResponder::class;
 }
