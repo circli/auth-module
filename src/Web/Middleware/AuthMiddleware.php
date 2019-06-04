@@ -27,7 +27,7 @@ use Psr\Log\LoggerInterface;
 class AuthMiddleware implements MiddlewareInterface
 {
     /** @var AccessRepositoryInterface */
-    protected $accessRepository;
+    private $accessRepository;
     /** @var LoggerInterface */
     private $logger;
     /** @var AccountTokenRepositoryInterface */
@@ -80,6 +80,8 @@ class AuthMiddleware implements MiddlewareInterface
                         $request->getAttribute(CoreRequestAttributeKeys::USER_AGENT, '')
                     )
                 );
+
+                $account = $this->accessRepository->populateRoles($account);
 
                 $sessionToken = $this->tokenProvider->getCurrentToken();
                 if ($sessionToken) {

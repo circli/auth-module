@@ -17,6 +17,8 @@ final class Account implements AccountInterface
     private $parent;
     /** @var ValueInterface[] */
     private $values = [];
+    /** @var array<string>*/
+    private $roles = [];
 
     public function __construct(int $id, Status $status, EncryptionKey $accountKey)
     {
@@ -80,5 +82,15 @@ final class Account implements AccountInterface
             }
         }
         return null;
+    }
+
+    public function haveRole(string $role): bool
+    {
+        return \in_array($role, $this->roles, true);
+    }
+
+    public function setRoles(array $roles): void
+    {
+        $this->roles = $roles;
     }
 }

@@ -54,4 +54,14 @@ final class GuestAccount implements AccountInterface
     {
         return null;
     }
+
+    public function haveRole(string $role): bool
+    {
+        return false;
+    }
+
+    public function setRoles(array $roles): void
+    {
+        // guest don't have roles
+    }
 }

@@ -26,4 +26,6 @@ interface AccessRepositoryInterface
      * @return RoleInterface[]
      */
     public function findAllRoles(): array;
+
+    public function populateRoles(AccountInterface $account): AccountInterface;
 }

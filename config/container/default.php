@@ -28,6 +28,7 @@ use Circli\Modules\Auth\Repositories\LoginLogRepository;
 use Circli\Modules\Auth\Repositories\LoginLogRepositoryInterface;
 use Circli\Modules\Auth\Voter\AccessCheckers;
 use Circli\Modules\Auth\Voter\AuthRequiredActionVoter;
+use Circli\Modules\Auth\Voter\RequireRoleActionVoter;
 use Circli\Modules\Auth\Voter\GuestRouteVoter;
 use Circli\Modules\Auth\Web\Actions\AccessDeniedAction;
 use Circli\Modules\Auth\Web\Actions\AccessDeniedActionInterface;
@@ -53,6 +54,7 @@ $defs = [
             $previous = new AccessCheckers();
         }
         $previous->addVoter($container->get(GuestRouteVoter::class));
+        $previous->addVoter($container->get(RequireRoleActionVoter::class));
         $voter = $container->get(AuthRequiredActionVoter::class);
         $voter->addAction(RequireAuthInterface::class);
         $previous->addVoter($voter);

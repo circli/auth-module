@@ -6,6 +6,7 @@ use Atlas\Pdo\Connection;
 use Circli\Modules\Auth\DataSource\AccountAccess\AccountAccessMapperInterface;
 use Circli\Modules\Auth\DataSource\AccountRole\AccountRoleMapperInterface;
 use Circli\Modules\Auth\Repositories\Objects\AccountInterface;
+use Circli\Modules\Auth\Repositories\Objects\Acl;
 use Circli\Modules\Auth\Repositories\Objects\AclInterface;
 use Circli\Modules\Auth\Repositories\Objects\PermissionInterface;
 use Circli\Modules\Auth\Repositories\Objects\RoleInterface;
@@ -31,6 +32,9 @@ final class AccessRepository implements AccessRepositoryInterface
 
     /** @var AclInterface[] */
     private $aclCache = [];
+
+    /** @var array<string> */
+    private $aclRoleCache = [];
 
     public function buildAcl(AccountInterface $account): AclInterface
     {
@@ -60,14 +64,16 @@ final class AccessRepository implements AccessRepositoryInterface
                 $roles[] = $access['role'];
             }
 
-            if (isset($list[$access['key']])) {
+            if (isset($list[$access['access_key']])) {
                 if ($access['access'] === 'denied') {
-                    $list[$access['key']] = $access['access'];
+                    $list[$access['access_key']] = $access['access'];
                 }
             } else {
-                $list[$access['key']] = $access['access'];
+                $list[$access['access_key']] = $access['access'];
             }
         }
+
+        $this->aclRoleCache[$account->getId()] = $roles;
 
         return $this->aclCache[$account->getId()] = new Acl($account, $list, $roles);
     }
@@ -137,5 +143,13 @@ final class AccessRepository implements AccessRepositoryInterface
     public function findAllRoles(): array
     {
         // TODO: Implement findAllRoles() method.
+    }
+
+    public function populateRoles(AccountInterface $account): AccountInterface
+    {
+        $this->buildAcl($account);
+        $account->setRoles($this->aclRoleCache[$account->getId()]);
+
+        return $account;
     }
 }

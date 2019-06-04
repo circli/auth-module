@@ -24,4 +24,8 @@ interface AccountInterface
     public function getValues(): iterable;
 
     public function getValue(string $key);
+
+    public function setRoles(array $roles): void;
+
+    public function haveRole(string $role): bool;
 }
