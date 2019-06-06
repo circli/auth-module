@@ -2,7 +2,7 @@
 
 namespace Circli\Modules\Auth\Web\Input;
 
-use Circli\Modules\Auth\Authentication\Web\InputData\LogoutData;
+use Circli\Modules\Auth\Web\InputData\LogoutData;
 use Circli\Modules\Auth\Web\RequestAttributeKeys;
 use Psr\Http\Message\ServerRequestInterface;
 

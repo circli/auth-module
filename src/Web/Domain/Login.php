@@ -5,7 +5,7 @@ namespace Circli\Modules\Auth\Web\Domain;
 use Circli\Modules\Auth\Authentication\AuthResponseStatus;
 use Circli\Modules\Auth\Authentication\Data\LoginDataInterface;
 use Circli\Modules\Auth\Authentication\Handler;
-use Circli\Modules\Auth\Authentication\Web\Payload\LoginPayload;
+use Circli\Modules\Auth\Web\Payload\LoginPayload;
 
 final class Login
 {

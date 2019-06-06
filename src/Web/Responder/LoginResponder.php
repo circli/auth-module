@@ -6,7 +6,7 @@ use Aura\Payload_Interface\PayloadInterface;
 use Circli\WebCore\Session\Factory as SessionFactory;
 use Circli\WebCore\Session\Flash\Message;
 use Circli\WebCore\Session\FlashSession;
-use Circli\Modules\Auth\Authentication\Web\Payload\LoginPayload;
+use Circli\Modules\Auth\Web\Payload\LoginPayload;
 use Circli\Modules\Auth\Events\BeforeLoginRedirect;
 use Circli\Modules\Auth\Session\Factory as AuthSessionFactory;
 use Psr\EventDispatcher\EventDispatcherInterface;

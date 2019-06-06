@@ -3,8 +3,8 @@
 namespace Circli\Modules\Auth\Web\Input;
 
 use Circli\Modules\Auth\Authentication\TokenProviders;
-use Circli\Modules\Auth\Authentication\Web\InputData\AuthMethodData;
-use Circli\Modules\Auth\Authentication\Web\InputData\CreateAccountData;
+use Circli\Modules\Auth\Web\InputData\AuthMethodData;
+use Circli\Modules\Auth\Web\InputData\CreateAccountData;
 use Circli\Modules\Auth\Repositories\Enums\Status;
 use Circli\Modules\Auth\Repositories\Objects\StaticRole;
 use Circli\Modules\Auth\Value\ClearTextPassword;

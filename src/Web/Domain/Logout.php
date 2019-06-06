@@ -2,8 +2,8 @@
 
 namespace Circli\Modules\Auth\Web\Domain;
 
-use Circli\Modules\Auth\Authentication\Web\InputData\LogoutData;
-use Circli\Modules\Auth\Authentication\Web\Payload\LogoutPayload;
+use Circli\Modules\Auth\Web\InputData\LogoutData;
+use Circli\Modules\Auth\Web\Payload\LogoutPayload;
 use Circli\Modules\Auth\Events\Logout as LogoutEvent;
 use Circli\Modules\Auth\Repositories\AccountTokenRepositoryInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;

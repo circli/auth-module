@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Circli\Modules\Auth\Authentication\Web\InputData;
+namespace Circli\Modules\Auth\Web\InputData;
 
 use Circli\Modules\Auth\Repositories\Objects\AccountInterface;
 use Circli\Modules\Auth\Repositories\Objects\AccountTokenInterface;

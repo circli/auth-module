@@ -2,7 +2,7 @@
 
 namespace Circli\Modules\Auth\Web\Responder;
 
-use Circli\Extensions\Template\LayoutTemplateResponder;
+use Circli\Extensions\Template\Responder\LayoutTemplateResponder;
 
 class ViewLoginResponder extends LayoutTemplateResponder
 {

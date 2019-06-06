@@ -1,8 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Circli\Modules\Auth\Authentication\Web\InputData;
-
-use Circli\Modules\Auth\Web\InputData\ProviderDataInterface;
+namespace Circli\Modules\Auth\Web\InputData;
 
 final class AuthMethodData
 {

@@ -2,8 +2,8 @@
 
 namespace Circli\Modules\Auth\Web\Domain;
 
-use Circli\Modules\Auth\Authentication\Web\InputData\CreateAccountData;
-use Circli\Modules\Auth\Authentication\Web\Payload\CreateAccountPayload;
+use Circli\Modules\Auth\Web\InputData\CreateAccountData;
+use Circli\Modules\Auth\Web\Payload\CreateAccountPayload;
 use Circli\Modules\Auth\Events\AccountCreated;
 use Circli\Modules\Auth\Repositories\AccessRepositoryInterface;
 use Circli\Modules\Auth\Repositories\AccountRepositoryInterface;
