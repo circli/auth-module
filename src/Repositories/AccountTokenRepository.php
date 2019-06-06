@@ -6,7 +6,6 @@ use Atlas\Mapper\Record;
 use Circli\Extensions\Encryption\FieldEncrypterFactoryInterface;
 use Circli\Modules\Auth\Authentication\PasswordHasher;
 use Circli\Modules\Auth\Authentication\TokenProviders;
-use Circli\Modules\Auth\Authentication\Web\InputData\AuthMethodData;
 use Circli\Modules\Auth\DataSource\AccountToken\AccountToken;
 use Circli\Modules\Auth\DataSource\AccountToken\AccountTokenMapperInterface;
 use Circli\Modules\Auth\Repositories\EncryptionFields\TokenUidField;
@@ -14,6 +13,7 @@ use Circli\Modules\Auth\Repositories\Exception\TokenNotFound;
 use Circli\Modules\Auth\Repositories\Objects\AccountInterface;
 use Circli\Modules\Auth\Repositories\Objects\AccountTokenInterface;
 use Circli\Modules\Auth\Value\EmailAddress;
+use Circli\Modules\Auth\Web\InputData\AuthMethodData;
 use Circli\Modules\Auth\Web\InputData\PasswordProviderData;
 
 final class AccountTokenRepository implements AccountTokenRepositoryInterface

@@ -2,10 +2,10 @@
 
 namespace Circli\Modules\Auth\Repositories;
 
-use Circli\Modules\Auth\Authentication\Web\InputData\AuthMethodData;
 use Circli\Modules\Auth\Repositories\Objects\AccountInterface;
 use Circli\Modules\Auth\Repositories\Objects\AccountTokenInterface;
 use Circli\Modules\Auth\Value\EmailAddress;
+use Circli\Modules\Auth\Web\InputData\AuthMethodData;
 
 interface AccountTokenRepositoryInterface
 {
