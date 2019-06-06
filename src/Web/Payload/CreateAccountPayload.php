@@ -3,16 +3,20 @@
 namespace Circli\Modules\Auth\Web\Payload;
 
 use Aura\Payload\Payload;
+use Aura\Payload_Interface\PayloadStatus;
 use Circli\Modules\Auth\Repositories\Objects\AccountInterface;
 
 class CreateAccountPayload extends Payload
 {
     public const SUCCESS = 'success';
     public const ERROR = 'error';
-    protected const ALLOWED_STATUS = [self::SUCCESS, self::ERROR];
+    public const ALREADY_CREATED = PayloadStatus::FOUND;
+
+    protected const ALLOWED_STATUS = [self::SUCCESS, self::ERROR, self::ALREADY_CREATED];
     protected const MESSAGES = [
         self::SUCCESS => 'Account created',
-        self::ERROR => 'Failed to create account'
+        self::ERROR => 'Failed to create account',
+        self::ALREADY_CREATED => 'Failed to create account. Details already in use.'
     ];
 
     public function __construct(string $status, AccountInterface $account = null)

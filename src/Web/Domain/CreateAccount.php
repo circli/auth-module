@@ -3,6 +3,7 @@
 namespace Circli\Modules\Auth\Web\Domain;
 
 use Circli\Modules\Auth\Web\InputData\CreateAccountData;
+use Circli\Modules\Auth\Web\InputData\PasswordProviderData;
 use Circli\Modules\Auth\Web\Payload\CreateAccountPayload;
 use Circli\Modules\Auth\Events\AccountCreated;
 use Circli\Modules\Auth\Repositories\AccessRepositoryInterface;
@@ -43,6 +44,17 @@ class CreateAccount
         $secret = bin2hex(random_bytes(32));
 
         try {
+            if ($data->getAuthMethod()) {
+                $provider = $data->getAuthMethod()->getAuthData();
+                if ($provider instanceof PasswordProviderData) {
+                    $emailIndex = $this->accountTokenRepository->getHashIndex($provider->getEmailAddress());
+                    $tokens = $this->accountTokenRepository->findByProviderAndUid('password', $emailIndex);
+                    if ($tokens && count($tokens)) {
+                        return new CreateAccountPayload(CreateAccountPayload::ALREADY_CREATED);
+                    }
+                }
+            }
+
             //todo add transaction
             $account = $this->accountRepository->create($secret, $data->getStatus());
             foreach ($data->getValues() as $value) {
