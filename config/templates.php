@@ -2,7 +2,7 @@
 
 $base = dirname(__DIR__);
 return [
-    'actur_templates' => [
+    'actus_templates' => [
         'auth' => $base . '/templates',
     ]
 ];
