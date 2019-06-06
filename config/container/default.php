@@ -2,6 +2,7 @@
 
 use Atlas\Orm\Atlas;
 use Circli\Modules\Auth\Authentication\Handler;
+use Circli\Modules\Auth\Authentication\PasswordHasher;
 use Circli\Modules\Auth\Authentication\Provider\ProviderFactory;
 use Circli\Modules\Auth\Authentication\Provider\ProviderFactoryInterface;
 use Circli\Modules\Auth\DataSource\Account\Account;
@@ -26,8 +27,11 @@ use Circli\Modules\Auth\Repositories\AccountTokenRepository;
 use Circli\Modules\Auth\Repositories\AccountTokenRepositoryInterface;
 use Circli\Modules\Auth\Repositories\LoginLogRepository;
 use Circli\Modules\Auth\Repositories\LoginLogRepositoryInterface;
+use Circli\Modules\Auth\Session\DefaultFactory;
+use Circli\Modules\Auth\Session\Factory as AuthSessionFactory;
 use Circli\Modules\Auth\Voter\AccessCheckers;
 use Circli\Modules\Auth\Voter\AuthRequiredActionVoter;
+use Circli\Modules\Auth\Voter\DefaultAllowRouteVoter;
 use Circli\Modules\Auth\Voter\RequireRoleActionVoter;
 use Circli\Modules\Auth\Voter\GuestRouteVoter;
 use Circli\Modules\Auth\Web\Actions\AccessDeniedAction;
@@ -39,6 +43,10 @@ use function DI\get;
 use Psr\Container\ContainerInterface;
 
 $defs = [
+    PasswordHasher::class => function() {
+        return new PasswordHasher([]);
+    },
+    AuthSessionFactory::class => autowire(DefaultFactory::class),
     AccountTokenRepositoryInterface::class => autowire(AccountTokenRepository::class),
     AccessRepositoryInterface::class => autowire(AccessRepository::class),
     AccountRepositoryInterface::class => autowire(AccountRepository::class),
@@ -58,6 +66,7 @@ $defs = [
         $voter = $container->get(AuthRequiredActionVoter::class);
         $voter->addAction(RequireAuthInterface::class);
         $previous->addVoter($voter);
+        $previous->addVoter($container->get(DefaultAllowRouteVoter::class));
         return $previous;
     }),
     AccessDeniedActionInterface::class => autowire(AccessDeniedAction::class),
