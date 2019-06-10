@@ -23,6 +23,7 @@ final class PhpSession implements AuthSessionInterface
 
     public function persist(AccountTokenInterface $token): bool
     {
+        session_regenerate_id();
         $_SESSION[self::SESSION_KEY]['auth_token'] = (string)$token;
         return true;
     }
