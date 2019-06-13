@@ -5,7 +5,7 @@ namespace Circli\Modules\Auth\Web\Actions;
 use Circli\Modules\Auth\Web\Responder\ViewCreateAccountResponder;
 use Circli\WebCore\Common\Actions\AbstractAction;
 
-final class ViewRegisterAction extends AbstractAction implements RequireAuthInterface
+final class ViewRegisterAction extends AbstractAction implements RequireAuthInterface, ViewRegisterInterface
 {
     protected $responder = ViewCreateAccountResponder::class;
 }

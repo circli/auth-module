@@ -12,8 +12,9 @@ use Circli\Modules\Auth\Voter\AccessCheckers;
 use Circli\Modules\Auth\Web\Actions\CreateAccountAction;
 use Circli\Modules\Auth\Web\Actions\HandleLoginAction;
 use Circli\Modules\Auth\Web\Actions\HandleLogoutAction;
-use Circli\Modules\Auth\Web\Actions\ViewLoginAction;
-use Circli\Modules\Auth\Web\Actions\ViewRegisterAction;
+use Circli\Modules\Auth\Web\Actions\ViewLoginInterface;
+use Circli\Modules\Auth\Web\Actions\ViewRegisterInterface;
+use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 
 final class Module implements ModuleInterface, ListenerProviderInterface, InitAdrApplication
@@ -47,12 +48,14 @@ final class Module implements ModuleInterface, ListenerProviderInterface, InitAd
         }
     }
 
-    public function initAdr(\Polus\Adr\Adr $adr)
+    public function initAdr(\Polus\Adr\Adr $adr, ContainerInterface $container = null)
     {
         $adr->post('/auth/register', new CreateAccountAction());
-        $adr->get('/auth/register', new ViewRegisterAction());
-        $adr->get('/auth/login', new ViewLoginAction());
         $adr->post('/auth/login', new HandleLoginAction());
         $adr->get('/auth/logout', new HandleLogoutAction());
+        if ($container) {
+            $adr->get('/auth/register', $container->get(ViewRegisterInterface::class));
+            $adr->get('/auth/login', $container->get(ViewLoginInterface::class));
+        }
     }
 }

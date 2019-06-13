@@ -37,6 +37,10 @@ use Circli\Modules\Auth\Voter\GuestRouteVoter;
 use Circli\Modules\Auth\Web\Actions\AccessDeniedAction;
 use Circli\Modules\Auth\Web\Actions\AccessDeniedActionInterface;
 use Circli\Modules\Auth\Web\Actions\RequireAuthInterface;
+use Circli\Modules\Auth\Web\Actions\ViewLoginAction;
+use Circli\Modules\Auth\Web\Actions\ViewLoginInterface;
+use Circli\Modules\Auth\Web\Actions\ViewRegisterAction;
+use Circli\Modules\Auth\Web\Actions\ViewRegisterInterface;
 use function DI\autowire;
 use function DI\decorate;
 use function DI\get;
@@ -70,6 +74,8 @@ $defs = [
         return $previous;
     }),
     AccessDeniedActionInterface::class => autowire(AccessDeniedAction::class),
+    ViewLoginInterface::class => autowire(ViewLoginAction::class),
+    ViewRegisterInterface::class => autowire(ViewRegisterAction::class),
 ];
 
 $mappers = [
@@ -84,7 +90,7 @@ $mappers = [
 ];
 
 foreach ($mappers as $mapper => $aliases) {
-    $defs[$mapper] = DI\factory(function (ContainerInterface $container, string $mapper) {
+    $defs[$mapper] = DI\factory(static function (ContainerInterface $container, string $mapper) {
         return $container->get(Atlas::class)->mapper($mapper);
     })->parameter('mapper', $mapper);
 
