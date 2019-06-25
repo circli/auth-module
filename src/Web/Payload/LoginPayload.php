@@ -12,7 +12,7 @@ class LoginPayload extends Payload
     protected const ALLOWED_STATUS = [self::SUCCESS, self::ERROR];
     protected const MESSAGES = [
         self::SUCCESS => 'Login success',
-        self::ERROR => 'Login failed'
+        self::ERROR => 'The username or password you wrote is not accurate. Please try to login again.',
     ];
 
     public function __construct(string $status, AuthResponse $authResponse = null)
