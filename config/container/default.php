@@ -41,6 +41,8 @@ use Circli\Modules\Auth\Web\Actions\ViewLoginAction;
 use Circli\Modules\Auth\Web\Actions\ViewLoginInterface;
 use Circli\Modules\Auth\Web\Actions\ViewRegisterAction;
 use Circli\Modules\Auth\Web\Actions\ViewRegisterInterface;
+use Circli\Modules\Auth\Web\Input\BasicCreateAccountInput;
+use Circli\Modules\Auth\Web\Input\CreateAccountInput;
 use function DI\autowire;
 use function DI\decorate;
 use function DI\get;
@@ -50,6 +52,7 @@ $defs = [
     PasswordHasher::class => function() {
         return new PasswordHasher([]);
     },
+    CreateAccountInput::class => autowire(BasicCreateAccountInput::class),
     AuthSessionFactory::class => autowire(DefaultFactory::class),
     AccountTokenRepositoryInterface::class => autowire(AccountTokenRepository::class),
     AccessRepositoryInterface::class => autowire(AccessRepository::class),

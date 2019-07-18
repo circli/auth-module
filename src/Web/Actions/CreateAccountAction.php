@@ -3,6 +3,7 @@
 namespace Circli\Modules\Auth\Web\Actions;
 
 use Circli\Modules\Auth\Web\Domain\CreateAccount;
+use Circli\Modules\Auth\Web\Input\BasicCreateAccountInput;
 use Circli\Modules\Auth\Web\Input\CreateAccountInput;
 use Circli\WebCore\Common\Actions\AbstractAction;
 
