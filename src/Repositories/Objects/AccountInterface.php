@@ -21,6 +21,9 @@ interface AccountInterface
 
     public function setValues(iterable $values);
 
+    /**
+     * @return ValueInterface[]
+     */
     public function getValues(): iterable;
 
     public function getValue(string $key);

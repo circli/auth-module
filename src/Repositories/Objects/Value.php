@@ -14,6 +14,16 @@ final class Value implements ValueInterface
     /** @var int */
     private $id;
 
+    public static function newEncryptedValue(string $key, $data): self
+    {
+        return new self($key, $data, true);
+    }
+
+    public static function newValue(string $key, $data): self
+    {
+        return new self($key, $data);
+    }
+
     public function __construct(string $key, $data, bool $encrypted = false, int $accountId = null, int $id = null)
     {
         $this->key = $key;

@@ -3,9 +3,12 @@
 namespace Circli\Modules\Auth;
 
 use Circli\Contracts\InitAdrApplication;
+use Circli\Contracts\InitCliApplication;
 use Circli\Contracts\ModuleInterface;
 use Circli\Contracts\PathContainer;
 use Circli\Core\Events\PostContainerBuild;
+use Circli\Modules\Auth\Command\AddAccountValue;
+use Circli\Modules\Auth\Command\ViewAccount;
 use Circli\Modules\Auth\Events\Providers\RememberMeProvider;
 use Circli\Modules\Auth\Events\Providers\TemplateAssignProvider;
 use Circli\Modules\Auth\Voter\AccessCheckers;
@@ -14,10 +17,12 @@ use Circli\Modules\Auth\Web\Actions\HandleLoginAction;
 use Circli\Modules\Auth\Web\Actions\HandleLogoutAction;
 use Circli\Modules\Auth\Web\Actions\ViewLoginInterface;
 use Circli\Modules\Auth\Web\Actions\ViewRegisterInterface;
+use Polus\Adr\Adr;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
+use Symfony\Component\Console\Application;
 
-final class Module implements ModuleInterface, ListenerProviderInterface, InitAdrApplication
+final class Module implements ModuleInterface, ListenerProviderInterface, InitAdrApplication, InitCliApplication
 {
     public function __construct(PathContainer $paths)
     {
@@ -48,7 +53,7 @@ final class Module implements ModuleInterface, ListenerProviderInterface, InitAd
         }
     }
 
-    public function initAdr(\Polus\Adr\Adr $adr, ContainerInterface $container = null)
+    public function initAdr(Adr $adr, ContainerInterface $container = null)
     {
         $adr->post('/auth/register', new CreateAccountAction());
         $adr->post('/auth/login', new HandleLoginAction());
@@ -57,5 +62,11 @@ final class Module implements ModuleInterface, ListenerProviderInterface, InitAd
             $adr->get('/auth/register', $container->get(ViewRegisterInterface::class));
             $adr->get('/auth/login', $container->get(ViewLoginInterface::class));
         }
+    }
+
+    public function initCli(Application $cli, ContainerInterface $container)
+    {
+        $cli->add($container->get(ViewAccount::class));
+        $cli->add($container->get(AddAccountValue::class));
     }
 }
