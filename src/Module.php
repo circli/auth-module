@@ -8,6 +8,7 @@ use Circli\Contracts\ModuleInterface;
 use Circli\Contracts\PathContainer;
 use Circli\Core\Events\PostContainerBuild;
 use Circli\Modules\Auth\Command\AddAccountValue;
+use Circli\Modules\Auth\Command\CleanTokens;
 use Circli\Modules\Auth\Command\CreateAccount;
 use Circli\Modules\Auth\Command\ViewAccount;
 use Circli\Modules\Auth\Events\Providers\RememberMeProvider;
@@ -70,5 +71,6 @@ final class Module implements ModuleInterface, ListenerProviderInterface, InitAd
         $cli->add($container->get(ViewAccount::class));
         $cli->add($container->get(AddAccountValue::class));
         $cli->add($container->get(CreateAccount::class));
+        $cli->add($container->get(CleanTokens::class));
     }
 }

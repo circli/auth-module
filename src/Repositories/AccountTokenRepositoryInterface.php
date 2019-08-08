@@ -37,4 +37,15 @@ interface AccountTokenRepositoryInterface
     ): AccountTokenInterface;
 
     public function createFromAuthData(AccountInterface $account, AuthMethodData $data): AccountTokenInterface;
+
+    /**
+     * @param string $provider
+     * @return AccountTokenInterface[]
+     */
+    public function findExpiredByProvider(string $provider): array;
+
+    /**
+     * @return AccountTokenInterface[]
+     */
+    public function findExpired(): array;
 }

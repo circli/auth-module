@@ -139,4 +139,26 @@ final class AccountTokenRepository implements AccountTokenRepositoryInterface
 
         return $token;
     }
+
+    /**
+     * @param string $provider
+     * @return AccountTokenInterface[]
+     */
+    public function findExpiredByProvider(string $provider): array
+    {
+        return $this->mapper->select()
+            ->where('provider = ', $provider)
+            ->where('expire < NOW()')
+            ->fetchRecords();
+    }
+
+    /**
+     * @return AccountTokenInterface[]
+     */
+    public function findExpired(): array
+    {
+        return $this->mapper->select()
+            ->where('expire < NOW()')
+            ->fetchRecords();
+    }
 }
