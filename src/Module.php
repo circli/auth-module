@@ -6,7 +6,10 @@ use Circli\Contracts\InitAdrApplication;
 use Circli\Contracts\InitCliApplication;
 use Circli\Contracts\ModuleInterface;
 use Circli\Contracts\PathContainer;
+use Circli\Core\ConditionalDefinition;
+use Circli\Core\Conditions\ClassExists;
 use Circli\Core\Events\PostContainerBuild;
+use Circli\Extensions\Encryption\Extension as EncryptionExtension;
 use Circli\Modules\Auth\Command\AddAccountValue;
 use Circli\Modules\Auth\Command\CleanTokens;
 use Circli\Modules\Auth\Command\CreateAccount;
@@ -32,7 +35,11 @@ final class Module implements ModuleInterface, ListenerProviderInterface, InitAd
 
     public function configure(): array
     {
-        return include dirname(__DIR__) . '/config/container/default.php';
+        $definitionPath = dirname(__DIR__) . '/config/container';
+        return [
+            include $definitionPath . '/default.php',
+            new ConditionalDefinition($definitionPath . '/encryption.php', new ClassExists(EncryptionExtension::class)),
+        ];
     }
 
     /**
