@@ -55,6 +55,10 @@ class Acl implements AclInterface
             if (isset($obj->account_id)) {
                 return $obj->account_id === $this->account->getId();
             }
+
+            if (method_exists($obj, 'getAccountId')) {
+                return $obj->getAccountId() === $this->account->getId();
+            }
         }
 
         return false;

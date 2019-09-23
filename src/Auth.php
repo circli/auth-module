@@ -60,7 +60,7 @@ class Auth implements AclInterface
         /** @var OwnerAccessRequest $event */
         $event = $this->eventDispatcher->dispatch(new OwnerAccessRequest($obj));
         if (!$event->allowed()) {
-            $this->eventDispatcher->dispatch(new AccessDenied($this->account, AccessDenied::OWNER, $obj));
+            $this->eventDispatcher->dispatch(new AccessDenied($this->account, AccessDenied::OWNER, get_class($obj)));
         }
         return $event->allowed();
     }
