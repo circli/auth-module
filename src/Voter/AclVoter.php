@@ -4,6 +4,7 @@ namespace Circli\Modules\Auth\Voter;
 
 use Circli\Modules\Auth\Events\AclAccessRequest;
 use Circli\Modules\Auth\Events\OwnerAccessRequest;
+use Circli\Modules\Auth\Events\OwnerAccessRequestInterface;
 use Circli\Modules\Auth\Repositories\AccessRepositoryInterface;
 use Circli\Modules\Auth\Repositories\Objects\AccountInterface;
 
@@ -26,7 +27,7 @@ final class AclVoter implements VoterInterface
 
     public function supports(AccessRequestEventInterface $accessRequest): bool
     {
-        return $accessRequest instanceof AclAccessRequest || $accessRequest instanceof OwnerAccessRequest;
+        return $accessRequest instanceof AclAccessRequest || $accessRequest instanceof OwnerAccessRequestInterface;
     }
 
     /**
@@ -36,18 +37,14 @@ final class AclVoter implements VoterInterface
     {
         $acl = $this->accessRepository->buildAcl($this->account);
         if ($accessRequestEvent instanceof AclAccessRequest) {
-            if (!$acl->isAllowed($accessRequestEvent->getKey())) {
-                $accessRequestEvent->deny();
-                return;
+            if ($acl->isAllowed($accessRequestEvent->getKey())) {
+                $accessRequestEvent->allow();
             }
-            $accessRequestEvent->allow();
         }
-        elseif ($accessRequestEvent instanceof OwnerAccessRequest) {
-            if (!$acl->isOwner($accessRequestEvent->getDocument())) {
-                $accessRequestEvent->deny();
-                return;
+        elseif ($accessRequestEvent instanceof OwnerAccessRequestInterface) {
+            if ($acl->isOwner($accessRequestEvent->getDocument())) {
+                $accessRequestEvent->allow();
             }
-            $accessRequestEvent->allow();
         }
     }
 }

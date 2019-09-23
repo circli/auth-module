@@ -2,7 +2,7 @@
 
 namespace Circli\Modules\Auth\Events;
 
-final class OwnerAccessRequest extends AbstractAccessRequest
+final class OwnerAccessRequest extends AbstractAccessRequest implements OwnerAccessRequestInterface
 {
     /** @var object */
     private $document;
