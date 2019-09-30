@@ -3,6 +3,7 @@
 namespace Circli\Modules\Auth\Command;
 
 use Circli\Modules\Auth\Repositories\AccountRepositoryInterface;
+use Circli\Modules\Auth\Repositories\Objects\ValueInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,10 +35,32 @@ final class ViewAccount extends Command
         $output->writeln('Account #' . $account->getId());
         $output->writeln('Status: ' . $account->getStatus()->getValue());
         $output->writeln('Values');
-        foreach ($account->getValues() as $value) {
-            $output->write("\t" . $value->getKey());
-            $output->writeln(': ' . $value->getValue());
-        }
+
+        $this->renderValues($output, $account->getValues());
+
         $output->writeln("\n\n");
+    }
+
+    private function renderValues(OutputInterface $output, iterable $values, int $level = 1): void
+    {
+        foreach ($values as $key => $value) {
+            if ($value instanceof ValueInterface) {
+                $key = $value->getKey();
+                $value = $value->getValue();
+            }
+            $output->write(str_repeat("\t", $level));
+            $output->write($key . ': ');
+
+            if (is_iterable($value)) {
+                $output->write("\n");
+                $this->renderValues($output, $value, $level + 1);
+            }
+            elseif (is_string($value) || is_numeric($value)) {
+                $output->writeln($value);
+            }
+            else {
+                $output->writeln(json_encode($value, JSON_PRETTY_PRINT));
+            }
+        }
     }
 }
