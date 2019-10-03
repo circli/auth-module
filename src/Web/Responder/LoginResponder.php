@@ -53,9 +53,13 @@ class LoginResponder
             $flashSession->addMessage(Message::error($payload->getMessages()), 'global');
         }
 
-        $loginRedirectEvent = $this->eventDispatcher->dispatch(
-            new BeforeLoginRedirect($request, $payload->getAuthResponse())
-        );
+        if ($payload instanceof LoginPayload) {
+            $loginRedirectEvent =BeforeLoginRedirect::fromAuthResponse($request, $payload->getAuthResponse());
+        }
+        else {
+            $loginRedirectEvent = BeforeLoginRedirect::fromPayload($request, $payload);
+        }
+        $loginRedirectEvent = $this->eventDispatcher->dispatch($loginRedirectEvent);
 
         if (!($loginRedirectEvent->getRedirectUri() instanceof UriInterface)) {
             $redirect = $loginRedirectEvent->getRedirectUri();
