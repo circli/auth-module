@@ -62,4 +62,6 @@ interface AccountRepositoryInterface
     public function removeAccountValue(ValueInterface $value): bool;
 
     public function findByToken(Objects\AccountTokenInterface $token);
+
+    public function findByValue(ValueInterface $value): AccountInterface;
 }

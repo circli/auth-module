@@ -173,4 +173,26 @@ final class AccountRepository implements AccountRepositoryInterface
     {
         return $this->findById($token->getAccountId());
     }
+
+    public function findByValue(ValueInterface $value): AccountInterface
+    {
+        $select = $this->mapper->select()
+            ->joinWith('values')->columns('accounts.*')
+            ->with(['values'])
+            ->where('values.value_key =', $value->getKey());
+
+        if ($value->isEncrypted()) {
+            $select->where('values.value_idx =', $this->valueObjectFactory->getValueIndex($value));
+        }
+        else {
+            $select->where('values.value_data = ', json_encode($value->getValue()));
+        }
+
+        $account = $select->fetchRecord();
+        if (!$account) {
+            throw new AccountNotFound();
+        }
+
+        return $this->objectFactory->createObject($account);
+    }
 }

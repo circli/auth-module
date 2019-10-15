@@ -96,18 +96,23 @@ final class AccountValueObjectFactory
         if ($record->encrypted) {
             $record->value_data = Symmetric::encrypt(new HiddenString(json_encode($value->getValue())), $account->getAccountKey());
             if (is_string($value->getValue())) {
-                $record->value_idx = $this->fieldEncrypterFactory
-                    ->getFieldEncrypter(AccountValueField::class)
-                    ->getBlindIndex($value->getValue());
+                $record->value_idx = $this->getValueIndex($value);
             }
         }
         else {
             $record->value_data = json_encode($value->getValue());
         }
 
-        $record->modified = date('Y-m-d');
+        $record->modified = date('Y-m-d H:i:s');
 
         return $record;
+    }
+
+    public function getValueIndex(ValueInterface $value): string
+    {
+        return $this->fieldEncrypterFactory
+            ->getFieldEncrypter(AccountValueField::class)
+            ->getBlindIndex($value->getValue());
     }
 
     private function getKeyFromRecord(AccountValuesRecord $record): string
