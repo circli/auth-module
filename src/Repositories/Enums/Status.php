@@ -5,12 +5,12 @@ namespace Circli\Modules\Auth\Repositories\Enums;
 use Sunkan\Enum\Enum;
 
 /**
- * @method static self APPROVED()
- * @method static self PENDING()
- * @method static self BLOCKED()
- * @method static self INVITED()
- * @method static self TEMPORARY()
- * @method static self DELETED()
+ * @method static Status APPROVED()
+ * @method static Status PENDING()
+ * @method static Status BLOCKED()
+ * @method static Status INVITED()
+ * @method static Status TEMPORARY()
+ * @method static Status DELETED()
  */
 final class Status extends Enum
 {
