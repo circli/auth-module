@@ -95,7 +95,7 @@ final class AccountValueObjectFactory
         $record->encrypted = (int) $value->isEncrypted();
         if ($record->encrypted) {
             $record->value_data = Symmetric::encrypt(new HiddenString(json_encode($value->getValue())), $account->getAccountKey());
-            if (is_string($value->getValue())) {
+            if (is_string($value->getValue()) && $value->getValue()) {
                 $record->value_idx = $this->getValueIndex($value);
             }
         }
