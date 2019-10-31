@@ -5,7 +5,7 @@ namespace Circli\Modules\Auth\Repositories\Objects;
 use Circli\Modules\Auth\Repositories\Enums\Status;
 use ParagonIE\Halite\Symmetric\EncryptionKey;
 
-final class Account implements AccountInterface
+final class Account implements AccountInterface, \JsonSerializable
 {
     /** @var Status */
     private $status;
@@ -92,5 +92,19 @@ final class Account implements AccountInterface
     public function setRoles(array $roles): void
     {
         $this->roles = $roles;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function jsonSerialize()
+    {
+        $name = $this->getValue('name');
+        $obj = [
+            'id' => $this->id,
+            'roles' => $this->roles,
+            'name' => $name ? $name->getValue() : '',
+        ];
+        return $obj;
     }
 }
