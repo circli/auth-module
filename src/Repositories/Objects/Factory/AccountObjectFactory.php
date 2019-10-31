@@ -28,11 +28,11 @@ final class AccountObjectFactory implements ObjectFactoryInterface
         $this->valueObjectFactory = $valueObjectFactory;
     }
 
-    public function createCollection(iterable $recordSet): iterable
+    public function createCollection(iterable $recordSet): array
     {
         $collection = [];
         foreach ($recordSet as $record) {
-            $collection[] = $this->createCollection($record);
+            $collection[] = $this->createObject($record);
         }
 
         return $collection;
