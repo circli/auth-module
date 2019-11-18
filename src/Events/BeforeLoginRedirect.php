@@ -18,7 +18,7 @@ final class BeforeLoginRedirect
     /** @var PayloadInterface */
     private $payload;
 
-    public static function fromAuthResponse(ServerRequestInterface $request, AuthResponse $authResponse): self
+    public static function fromAuthResponse(ServerRequestInterface $request, ?AuthResponse $authResponse): self
     {
         return new self($request, $authResponse);
     }

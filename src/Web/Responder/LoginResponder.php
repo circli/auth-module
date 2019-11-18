@@ -54,7 +54,7 @@ class LoginResponder
         }
 
         if ($payload instanceof LoginPayload) {
-            $loginRedirectEvent =BeforeLoginRedirect::fromAuthResponse($request, $payload->getAuthResponse());
+            $loginRedirectEvent = BeforeLoginRedirect::fromAuthResponse($request, $payload->getAuthResponse());
         }
         else {
             $loginRedirectEvent = BeforeLoginRedirect::fromPayload($request, $payload);
