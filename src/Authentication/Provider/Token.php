@@ -56,10 +56,11 @@ final class Token implements ProviderInterface
         $accountId = 0;
 
         foreach ($tokens as $token) {
+            $currentError = null;
             if ($token->haveExpired(new \DateTimeImmutable())) {
-                $error = new NotAuthenticated('Token has expired', $token->getAccountId(), NotAuthenticated::EXPIRED);
+                $currentError = $error = new NotAuthenticated('Token has expired', $token->getAccountId(), NotAuthenticated::EXPIRED);
             }
-            if ($token->isValid($info->getToken())) {
+            if (!$currentError && $token->isValid($info->getToken())) {
                 $this->currentToken = $token;
                 return $this->accountRepository->findByToken($token);
             }

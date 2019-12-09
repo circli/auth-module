@@ -49,7 +49,6 @@ class AccountTokenRecord extends Record implements AccountTokenInterface
         if ($expire === null) {
             return false;
         }
-
         return $time > $expire;
     }
 

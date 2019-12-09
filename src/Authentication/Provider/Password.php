@@ -64,13 +64,7 @@ final class Password implements ProviderInterface
                     $this->tokenRepository->save($token);
                 }
 
-                $account = $this->accountRepository->findByToken($token);
-
-                if ($info->rememberMe()) {
-                    $this->tokenRepository->create($account, 'remember-me', new \DateTimeImmutable('+2 weeks'));
-                }
-
-                return $account;
+                return $this->accountRepository->findByToken($token);
             }
             $accountId = $token->getAccountId();
         }
