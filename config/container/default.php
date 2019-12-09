@@ -49,7 +49,7 @@ use function DI\get;
 use Psr\Container\ContainerInterface;
 
 $defs = [
-    PasswordHasher::class => function() {
+    PasswordHasher::class => static function() {
         return new PasswordHasher([]);
     },
     CreateAccountInput::class => autowire(BasicCreateAccountInput::class),
@@ -58,13 +58,13 @@ $defs = [
     AccessRepositoryInterface::class => autowire(AccessRepository::class),
     AccountRepositoryInterface::class => autowire(AccountRepository::class),
     LoginLogRepositoryInterface::class => autowire(LoginLogRepository::class),
-    ProviderFactoryInterface::class => function(ContainerInterface $container) {
-        return new ProviderFactory(function($cls) use($container) {
+    ProviderFactoryInterface::class => static function(ContainerInterface $container) {
+        return new ProviderFactory(static function($cls) use($container) {
             return $container->get($cls);
         });
     },
     Handler::class => autowire(),
-    AccessCheckers::class =>  decorate(function ($previous, ContainerInterface $container) {
+    AccessCheckers::class =>  decorate(static function ($previous, ContainerInterface $container) {
         if (!$previous instanceof AccessCheckers) {
             $previous = new AccessCheckers();
         }
